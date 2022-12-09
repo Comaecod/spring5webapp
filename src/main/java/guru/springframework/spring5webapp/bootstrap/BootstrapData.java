@@ -25,26 +25,41 @@ public class BootstrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Author a1 = new Author("Vishnu","Vardhan");
+
+        System.out.println("----------Bootstraping Data----------");
+
+        Author a1 = new Author("Vishnu", "Vardhan");
         Book b1 = new Book("Coding is fun", "123456");
-        Publisher p1 = new Publisher("Comaecod","Antop Hill","Mumbai","Maharashtra","400037");
+
+        Author a2 = new Author("Shivendu", "Saurabh");
+        Book b2 = new Book("CA is fun", "654321");
+
+        Publisher p1 = new Publisher("Comaecod", "Antop Hill", "Mumbai", "Maharashtra", "400037");
+
+        /* @ERROR: object references an unsaved transient instance - save the transient instance before flushing */
+        publisherRepository.save(p1);
+
         a1.getBooks().add(b1);
         b1.getAuthors().add(a1);
+        b1.setPublisher(p1);
+
+        a2.getBooks().add(b2);
+        b2.getAuthors().add(a2);
+        b2.setPublisher(p1);
+
+        p1.getBooks().add(b1);
+        p1.getBooks().add(b2);
 
         authorRepository.save(a1);
         bookRepository.save(b1);
-        publisherRepository.save(p1);
-
-        Author a2 = new Author("Shivendu","Saurabh");
-        Book b2 = new Book("CA is fun", "654321");
-        Publisher p2 = new Publisher("Hinsha","Pydhonie","Mumbai","Maharashtra","400001");
-        a2.getBooks().add(b2);
-        b2.getAuthors().add(a2);
 
         authorRepository.save(a2);
         bookRepository.save(b2);
-        publisherRepository.save(p2);
 
-        System.out.println("Bootstrap Data, total rows: " + authorRepository.count() + bookRepository.count() + publisherRepository.count());
+        publisherRepository.save(p1);
+
+        System.out.println("Author Repo: " + authorRepository.count());
+        System.out.println("Book Repo: " + bookRepository.count());
+        System.out.println("Publisher Repo: " + publisherRepository.count());
     }
 }
